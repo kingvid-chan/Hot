@@ -58,7 +58,7 @@ $(function () {
         colors: shuffle(colors),
         chart: {
             borderWidth: 0,
-            plotShadow: true
+            // plotShadow: true
         }
     });
 
@@ -115,7 +115,7 @@ $(function () {
             yAxis: {
                 min: 100000,
                 title: {
-                    text: '实时热搜指数'
+                    text: ''
                 },
                 gridLineWidth: 0,
                 tickLength: 5,

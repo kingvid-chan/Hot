@@ -1,10 +1,26 @@
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/HotRanking');
+var mysql = require('mysql');
+var connection = mysql.createConnection({
+	host: 		"localhost",
+	user: 		"webadmin",
+	password: 	"Web@idc",
+	database: 	"HotData"
+});
 
-//数据库collection
-exports.HotWords = mongoose.model('HotWords',{
-	name: String,
-	time: Array,
-	caption: String,
-	createdAt: {type:Date, default:Date.now, expires:15*24*60*60}
+connection.connect(function(err){
+	if (err) {
+		console.error('error connecting：' + err.stack);
+		return;
+	}
+
+	console.log('connected as id ' + connection.threadId);
+});
+
+connection.query('', function(err, rows, fields){
+	if (err) throw err;
+
+	console.log('The solution is：', rows[0].solution);
+})
+
+connection.end(function(err){
+	if (err) throw err;
 });
