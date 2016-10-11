@@ -1,0 +1,30 @@
+{
+  "name": "resou",
+  "version": "1.0.0",
+  "description": "all about hot ranking ",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "hot",
+    "ranking",
+    "words",
+    "weibo",
+    "jd"
+  ],
+  "author": "kingvid",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "moment": "^2.15.1",
+    "mongoose": "^4.6.1",
+    "node-schedule": "^1.1.1",
+    "superagent": "^2.2.0",
+    "urlencode": "^1.1.0"
+  },
+  "devDependencies": {
+    "express": "^4.14.0",
+    "gulp": "^3.9.1"
+  }
+}

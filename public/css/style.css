@@ -1,0 +1,45 @@
+* {
+  box-sizing: bolder-box; }
+
+html {
+  font-family: 'microsoft yahei';
+  font-size: 20px; }
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: 'microsoft yahei';
+  font-weight: normal; }
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0; }
+
+.chart-container {
+  position: absolute;
+  top: 10%;
+  width: 100%;
+  opacity: 0.95; }
+
+.heatmap {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0; }
+
+.heatWord .wordList li {
+  position: absolute;
+  padding: 25px;
+  border-radius: 100px;
+  transform: translate3d(-50%, -50%, 0);
+  -webkit-transform: translate3d(-50%, -50%, 0); }
+
+.nav-tabs {
+  position: relative;
+  z-index: 9999; }
+
+/*# sourceMappingURL=style.css.map */

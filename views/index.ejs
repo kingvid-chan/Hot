@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <meta charset="UTF-8">
+    <title>热搜榜</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,Chrome=1.0">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <link href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="//cdn.bootcss.com/jquery/2.2.0/jquery.min.js"></script>
+</head>  
+<body>
+<div class="wrapper">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+            <a href="#columnChart-container" role="tab" data-toggle="tab">
+                columnChart-container
+            </a>
+        </li>
+        <li role="presentation">
+            <a href="#heatmap-container" role="tab" data-toggle="tab">
+                heatmap
+            </a>
+        </li>
+        <li role="presentation">
+            <a href="#wordCloud-container" role="tab" data-toggle="tab">
+                wordCloud
+            </a>
+        </li>
+        <li role="presentation">
+            <a href="#settings" role="tab" data-toggle="tab">
+                Settings
+            </a>
+        </li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="columnChart-container">
+            <div id="RealHotChart" class="chart-container"></div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="heatmap-container">
+            <div class="heatWord">
+                <!-- <h1 class="title">热词列表</h1> -->
+                <ul class="wordList">
+                </ul>
+            </div>
+            <div class="heatmap" id="heatmap"></div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="wordCloud-container">
+            <div class="wordCloud" id="wordCloud"></div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="settings">
+            ...
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+	var browser = {
+	    windowWidth: $(window).width(),
+	    windowHeight: $(window).height()
+	};
+	//自适应窗口
+	function resize(){
+	    $(".heatmap").height(browser.windowHeight-42).width(browser.windowWidth);
+	    $(".chart-container").height(0.8*browser.windowHeight);
+	    $(".wordCloud").width(browser.windowWidth).height(browser.windowHeight);
+	}
+	window.addEventListener("resize", function(){
+	    resize();
+	});
+</script>
+<script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+<script src="https://cdn.bootcss.com/echarts/3.2.2/echarts.simple.js"></script>
+<script type="text/javascript" src="js/echarts-wordcloud.js"></script>
+<script type="text/javascript" src="js/heatmap.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>
