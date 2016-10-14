@@ -11,54 +11,13 @@ function shuffle(array){
 
     return _array;
 }
-//动态更新背景文字
-function updateHeatmap(word_data){
-    var points = [];
-    for (var i = 0; i < word_data.length; i++) {
-        var x = Math.floor(Math.random()*browser.windowWidth);
-        var y = Math.floor(Math.random()*browser.windowHeight);
-        $(".wordList").append("<li id='"+i+"' style='left:"+x+"px;top:"+y+"px;' data-value='"+word_data[i].value+"'>"+word_data[i].name+"</li>");
-        points.push({
-            x: x,
-            y: y,
-            value: word_data[i].value
-        });
-    }
-    
-    // create configuration object
-    var config = {
-        container: document.getElementById('heatmap'),
-        // radius: 100,
-        maxOpacity: 0.5,
-        minOpacity: 0.015,
-        blur: 1,
-        // gradient: {
-        //   // enter n keys between 0 and 1 here
-        //   // for gradient color customization
-        //   '.2': 'gray',
-        //   '.5': 'pink',
-        //   '.8': 'orange',
-        //   '.95': 'red'
-        // }
-    };
-    // create heatmap with configuration
-    var heatmap = h337.create(config); 
-    var point_data = {
-        // max: 10000,
-        min: 1000000,
-        data: points
-    };
-    heatmap.setData(point_data);
-}
-
 
 $(function () {
     var colors = ['#4D79CF', '#24B3C4', '#91E0F9', '#AD7ACE', '#57B04F', '#8EE286', '#FBAC58', '#F6E351', '#C3965B', '#F35650'];
     Highcharts.setOptions({
         colors: shuffle(colors),
         chart: {
-            borderWidth: 0,
-            // plotShadow: true
+            borderWidth: 0
         }
     });
 
@@ -165,27 +124,80 @@ $(function () {
                 }
             }]
         });
-    });  
-    //综合数据，热力图
-    $.getJSON('/getTotalHotData', function(result){
-        var word_data = result.data;
+    });
+
+    //趋势图
+    $.getJSON('/Tendency', function(result){
+        result.data.forEach(function(value, index){
+            if (index>10) value.visible = false;
+            value.marker = {
+                symbol: 'circle'
+            };
+        })
+        var TendencyChart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'TendencyChart',
+                type: 'line',
+                style: {
+                    fontFamily: '"microsoft yahei"',
+                    fontSize: '12px',
+                    color: '#263E56'
+                }
+            },
+            credits: false,
+            title: {
+                text: ''
+            },
+            xAxis: {
+                title: {
+                    text: ''
+                },
+                // type: 'datetime',
+                // dateTimeLabelFormats: { 
+                //     // hour: '%H:%M',
+                //     day: '%e. %b',
+                //     month: '%b \'%y'
+                // },
+            },
+            yAxis: {
+                min: 300000,
+                title: {
+                    text: ''
+                }
+            },
+            legend: {
+                // enabled: false
+            },
+            tooltip: {
+                // pointFormat:'<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y}</b><br/>'
+            },
+            series: result.data
+        });
+    })
+
+    //执行窗口自适应函数
+    resize();
+    
+
+
+    //动态更新背景文字
+    function updateHeatmap(word_data){
         var points = [];
-        var height = browser.windowHeight - 50;
         for (var i = 0; i < word_data.length; i++) {
             var x = Math.floor(Math.random()*browser.windowWidth);
-            var y = Math.floor(Math.random()*height+50);
-            $(".wordList").append("<li id='"+i+"' style='left:"+x+"px;top:"+y+"px;' data-value='"+word_data[i].y+"'>"+word_data[i].name+"</li>");
+            var y = Math.floor(Math.random()*browser.windowHeight);
+            $(".wordList").append("<li id='"+i+"' style='left:"+x+"px;top:"+y+"px;' data-value='"+word_data[i].value+"'>"+word_data[i].name+"</li>");
             points.push({
                 x: x,
                 y: y,
-                value: word_data[i].y
+                value: word_data[i].value
             });
         }
         
         // create configuration object
         var config = {
             container: document.getElementById('heatmap'),
-            radius: 100,
+            // radius: 100,
             maxOpacity: 0.5,
             minOpacity: 0.015,
             blur: 1,
@@ -206,98 +218,137 @@ $(function () {
             data: points
         };
         heatmap.setData(point_data);
-    });
-    //综合数据，文字标签
-    $.getJSON('/getTotalHotData', function(result){
-        var data = result.data;
-        var wordsArr = [];
-        for (var i = 0; i < data.length; i++) {
-            wordsArr.push({
-                name: data[i].name,
-                value: Math.sqrt(data[i].y)
-            });
-        }
-        var chart = echarts.init(document.getElementById('wordCloud'));
-        var maskImage = new Image();
+    }
 
-        var option = {
-            series: [{
-                type: 'wordCloud',
 
-                // The shape of the "cloud" to draw. Can be any polar equation represented as a
-                // callback function, or a keyword present. Available presents are circle (default),
-                // cardioid (apple or heart shape curve, the most known polar equation), diamond (
-                // alias of square), triangle-forward, triangle, (alias of triangle-upright, pentagon, and star.
+    //综合数据，热力图
+    // $.getJSON('/getTotalHotData', function(result){
+    //     var word_data = result.data;
+    //     var points = [];
+    //     var height = browser.windowHeight - 50;
+    //     for (var i = 0; i < word_data.length; i++) {
+    //         var x = Math.floor(Math.random()*browser.windowWidth);
+    //         var y = Math.floor(Math.random()*height+50);
+    //         $(".wordList").append("<li id='"+i+"' style='left:"+x+"px;top:"+y+"px;' data-value='"+word_data[i].y+"'>"+word_data[i].name+"</li>");
+    //         points.push({
+    //             x: x,
+    //             y: y,
+    //             value: word_data[i].y
+    //         });
+    //     }
+        
+    //     // create configuration object
+    //     var config = {
+    //         container: document.getElementById('heatmap'),
+    //         radius: 100,
+    //         maxOpacity: 0.5,
+    //         minOpacity: 0.015,
+    //         blur: 1,
+    //         // gradient: {
+    //         //   // enter n keys between 0 and 1 here
+    //         //   // for gradient color customization
+    //         //   '.2': 'gray',
+    //         //   '.5': 'pink',
+    //         //   '.8': 'orange',
+    //         //   '.95': 'red'
+    //         // }
+    //     };
+    //     // create heatmap with configuration
+    //     var heatmap = h337.create(config); 
+    //     var point_data = {
+    //         // max: 10000,
+    //         min: 1000000,
+    //         data: points
+    //     };
+    //     heatmap.setData(point_data);
+    // });
+    // //综合数据，文字标签
+    // $.getJSON('/getTotalHotData', function(result){
+    //     var data = result.data;
+    //     var wordsArr = [];
+    //     for (var i = 0; i < data.length; i++) {
+    //         wordsArr.push({
+    //             name: data[i].name,
+    //             value: Math.sqrt(data[i].y)
+    //         });
+    //     }
+    //     var chart = echarts.init(document.getElementById('wordCloud'));
+    //     var maskImage = new Image();
 
-                shape: 'star',
+    //     var option = {
+    //         series: [{
+    //             type: 'wordCloud',
 
-                // A silhouette image which the white area will be excluded from drawing texts.
-                // The shape option will continue to apply as the shape of the cloud to grow.
+    //             // The shape of the "cloud" to draw. Can be any polar equation represented as a
+    //             // callback function, or a keyword present. Available presents are circle (default),
+    //             // cardioid (apple or heart shape curve, the most known polar equation), diamond (
+    //             // alias of square), triangle-forward, triangle, (alias of triangle-upright, pentagon, and star.
 
-                maskImage: maskImage,
+    //             shape: 'star',
 
-                // Folllowing left/top/width/height/right/bottom are used for positioning the word cloud
-                // Default to be put in the center and has 75% x 80% size.
+    //             // A silhouette image which the white area will be excluded from drawing texts.
+    //             // The shape option will continue to apply as the shape of the cloud to grow.
 
-                // left: 'center',
-                // top: 'center',
-                width: 0.9*browser.windowHeight,
-                // height: '90%',
-                // right: null,
-                // bottom: null,
+    //             maskImage: maskImage,
 
-                // Text size range which the value in data will be mapped to.
-                // Default to have minimum 12px and maximum 60px size.
+    //             // Folllowing left/top/width/height/right/bottom are used for positioning the word cloud
+    //             // Default to be put in the center and has 75% x 80% size.
 
-                sizeRange: [10, 50],
+    //             // left: 'center',
+    //             // top: 'center',
+    //             width: 0.9*browser.windowHeight,
+    //             // height: '90%',
+    //             // right: null,
+    //             // bottom: null,
 
-                // Text rotation range and step in degree. Text will be rotated randomly in range [-90, 90] by rotationStep 45
+    //             // Text size range which the value in data will be mapped to.
+    //             // Default to have minimum 12px and maximum 60px size.
 
-                rotationRange: [-90, 90],
-                rotationStep: 45,
+    //             sizeRange: [10, 50],
 
-                // size of the grid in pixels for marking the availability of the canvas
-                // the larger the grid size, the bigger the gap between words.
+    //             // Text rotation range and step in degree. Text will be rotated randomly in range [-90, 90] by rotationStep 45
 
-                gridSize: 2,
+    //             rotationRange: [-90, 90],
+    //             rotationStep: 45,
 
-                // Global text style
-                textStyle: {
-                    normal: {
-                        fontFamily: 'microsoft yahei',
-                        // fontWeight: 'bold',
-                        // Color can be a callback function or a color string
-                        color: function () {
-                            // Random color
-                            return 'rgb(' + [
-                                Math.round(Math.random() * 160),
-                                Math.round(Math.random() * 160),
-                                Math.round(Math.random() * 160)
-                            ].join(',') + ')';
-                        }
-                    },
-                    // emphasis: {
-                    //     shadowBlur: 10,
-                    //     shadowColor: '#333'
-                    // }
-                },
+    //             // size of the grid in pixels for marking the availability of the canvas
+    //             // the larger the grid size, the bigger the gap between words.
 
-                // Data is an array. Each array item must have name and value property.
-                data: wordsArr.sort(function(a, b){
-                    return b.value - a.value;
-                })
-            }]
-        };
+    //             gridSize: 2,
 
-        maskImage.onload = function () {
-           option.series[0].maskImage
-           chart.setOption(option);
-        };
+    //             // Global text style
+    //             textStyle: {
+    //                 normal: {
+    //                     fontFamily: 'microsoft yahei',
+    //                     // fontWeight: 'bold',
+    //                     // Color can be a callback function or a color string
+    //                     color: function () {
+    //                         // Random color
+    //                         return 'rgb(' + [
+    //                             Math.round(Math.random() * 160),
+    //                             Math.round(Math.random() * 160),
+    //                             Math.round(Math.random() * 160)
+    //                         ].join(',') + ')';
+    //                     }
+    //                 },
+    //                 // emphasis: {
+    //                 //     shadowBlur: 10,
+    //                 //     shadowColor: '#333'
+    //                 // }
+    //             },
 
-        maskImage.src = '../logo.png';
-    });
+    //             // Data is an array. Each array item must have name and value property.
+    //             data: wordsArr.sort(function(a, b){
+    //                 return b.value - a.value;
+    //             })
+    //         }]
+    //     };
 
-    //执行窗口自适应函数
-    resize();
-    
+    //     maskImage.onload = function () {
+    //        option.series[0].maskImage
+    //        chart.setOption(option);
+    //     };
+
+    //     maskImage.src = '../logo.png';
+    // });
 });

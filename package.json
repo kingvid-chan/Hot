@@ -18,8 +18,9 @@
   "dependencies": {
     "cheerio": "^0.22.0",
     "ejs": "^2.5.2",
+    "eventproxy": "^0.3.5",
     "moment": "^2.15.1",
-    "node-mysql": "^0.4.2",
+    "mysql": "github:mysqljs/mysql",
     "node-schedule": "^1.1.1",
     "superagent": "^2.2.0",
     "urlencode": "^1.1.0"

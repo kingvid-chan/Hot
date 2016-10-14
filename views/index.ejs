@@ -30,8 +30,8 @@
             </a>
         </li>
         <li role="presentation">
-            <a href="#settings" role="tab" data-toggle="tab">
-                Settings
+            <a href="#Tendency" role="tab" data-toggle="tab">
+                趋势图
             </a>
         </li>
     </ul>
@@ -51,8 +51,8 @@
         <div role="tabpanel" class="tab-pane" id="wordCloud-container">
             <div class="wordCloud" id="wordCloud"></div>
         </div>
-        <div role="tabpanel" class="tab-pane" id="settings">
-            ...
+        <div role="tabpanel" class="tab-pane" id="Tendency">
+            <div id="TendencyChart" class="Tendency-container"></div>
         </div>
     </div>
 </div>
@@ -64,7 +64,7 @@
 	//自适应窗口
 	function resize(){
 	    $(".heatmap").height(browser.windowHeight-42).width(browser.windowWidth);
-	    $(".chart-container").height(0.8*browser.windowHeight);
+	    $("#RealHotChart, #TendencyChart").height(0.8*browser.windowHeight);
 	    $(".wordCloud").width(browser.windowWidth).height(browser.windowHeight);
 	}
 	window.addEventListener("resize", function(){
